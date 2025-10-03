@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Detective Geológico - Placas Tectónicas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .screen.active {
+            display: flex;
+            opacity: 1;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Portada */
+        #portada {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        }
+
+        .titulo-principal {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 8vw, 5rem);
+            font-weight: 900;
+            color: #f4e9cd;
+            text-align: center;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .btn-comenzar {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            padding: 20px 50px;
+            background: linear-gradient(45deg, #8b4513, #d2691e);
+            color: #fff;
+            border: 3px solid #f4e9cd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-comenzar:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+            background: linear-gradient(45deg, #a0522d, #e67e22);
+        }
+
+        /* Registro */
+        #registro {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .registro-container {
+            background: #f4e9cd;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .registro-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #8b4513;
+            margin-bottom: 30px;
+        }
+
+        .input-nombre {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-family: 'Crimson Text', serif;
+            border: 3px solid #8b4513;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-registrar {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            padding: 15px 40px;
+            background: #8b4513;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-registrar:hover {
+            background: #a0522d;
+            transform: translateY(-3px);
+        }
+
+        /* Tutorial */
+        .tutorial-container {
+            background: #f4e9cd;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .tutorial-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #8b4513;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .bordes-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .borde-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #8b4513;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .borde-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .borde-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .diagrama {
+            font-size: 2rem;
+            margin: 15px 0;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .borde-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .ejemplo {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem !important;
+        }
+
+        .btn-continuar {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            padding: 15px 40px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: all 0.3s;
+        }
+
+        .btn-continuar:hover {
+            background: #229954;
+            transform: translateY(-3px);
+        }
+
+        .mision-secreta {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #c0392b;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .mision-secreta h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Caso */
+        .caso-container {
+            background: #f4e9cd;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            overflow: hidden;
+        }
+
+        /* Barra de progreso */
+        .barra-progreso {
+            background: #8b4513;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .etapa {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #d2691e;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .etapa.completada {
+            background: #27ae60;
+            border-color: #f4e9cd;
+            animation: bounce 0.5s;
+        }
+
+        .etapa.actual {
+            background: #e67e22;
+            border-color: #fff;
+            transform: scale(1.2);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Noticia periódico */
+        .noticia {
+            padding: 30px;
+            border-bottom: 3px solid #8b4513;
+        }
+
+        .noticia-header {
+            text-align: center;
+            border-bottom: 2px solid #8b4513;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .fecha {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .noticia h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #2c3e50;
+            margin: 10px 0;
+            line-height: 1.2;
+        }
+
+        .imagenes-caso {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .noticia-imagen {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border: 5px solid #8b4513;
+            border-radius: 5px;
+        }
+
+        .imagen-mapa {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            border: 5px solid #2c3e50;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+
+        .noticia-texto {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .destacado {
+            font-weight: bold;
+            color: #c0392b;
+        }
+
+        .dato-impactante {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #f39c12;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .pista-geologica {
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            border-left: 5px solid #f39c12;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Preguntas */
+        .preguntas {
+            padding: 30px;
+            background: #fff8e7;
+        }
+
+        .pregunta {
+            margin-bottom: 25px;
+        }
+
+        .pregunta label {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .pregunta select,
+        .pregunta input[type="text"],
+        .pregunta input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            font-family: 'Crimson Text', serif;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .pregunta select.correcto,
+        .pregunta input.correcto {
+            border-color: #27ae60;
+            background: #d4edda;
+        }
+
+        .pregunta select.incorrecto,
+        .pregunta input.incorrecto {
+            border-color: #e74c3c;
+            background: #f8d7da;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .feedback.exito {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Botones */
+        .botones {
+            padding: 20px 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-verificar {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .btn-verificar:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-siguiente {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .btn-siguiente:hover:not(:disabled) {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-siguiente:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .palabra-secreta {
+            background: #f39c12;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            display: none;
+            animation: revelar 0.5s;
+        }
+
+        .palabra-secreta.mostrar {
+            display: block;
+        }
+
+        @keyframes revelar {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes celebration {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .celebracion {
+            animation: celebration 0.5s ease-in-out;
+        }
+
+        /* Pantalla final */
+        #final {
+            background: linear-gradient(135deg, #16a085 0%, #2ecc71 100%);
+        }
+
+        .final-container {
+            background: #f4e9cd;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .final-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #27ae60;
+            margin-bottom: 30px;
+        }
+
+        .frase-completa {
+            background: #fff;
+            padding: 30px;
+            border: 4px solid #27ae60;
+            border-radius: 10px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #27ae60;
+        }
+
+        .stat-numero {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .instruccion-profesor {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .titulo-principal {
+                font-size: 2.5rem;
+            }
+
+            .caso-container {
+                margin: 10px;
+            }
+
+            .noticia h2 {
+                font-size: 1.5rem;
+            }
+
+            .imagenes-caso {
+                grid-template-columns: 1fr;
+            }
+
+            .barra-progreso {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .etapa {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .registro-container,
+            .final-container {
+                padding: 30px 20px;
+            }
+
+            .tutorial-container {
+                padding: 20px;
+            }
+
+            .tutorial-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .bordes-info {
+                grid-template-columns: 1fr;
+            }
+
+            .borde-card h3 {
+                font-size: 1rem;
+            }
+
+            .diagrama {
+                font-size: 1.5rem;
+            }
+
+            .frase-completa {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PORTADA -->
+    <div id="portada" class="screen active">
+        <h1 class="titulo-principal">🌍 DETECTIVE GEOLÓGICO 🌍</h1>
+        <button class="btn-comenzar" onclick="mostrarPantalla('registro')">Comenzar Investigación</button>
+    </div>
+
+    <!-- REGISTRO -->
+    <div id="registro" class="screen">
+        <div class="registro-container">
+            <h2>📝 Registro de Equipo Detective</h2>
+            <p style="margin-bottom: 20px; font-size: 1.1rem;">Introduce el nombre de tu equipo para comenzar la investigación:</p>
+            <input type="text" id="nombreEquipo" class="input-nombre" placeholder="Nombre del equipo..." required>
+            <button class="btn-registrar" onclick="registrarEquipo()">Iniciar Investigación</button>
+        </div>
+    </div>
+
+    <!-- TUTORIAL -->
+    <div id="tutorial" class="screen">
+        <div class="tutorial-container">
+            <h2>🎓 Guía del Detective: Tipos de Bordes Tectónicos</h2>
+            <p style="text-align: center; margin-bottom: 20px; font-size: 1.1rem;">La Tierra está dividida en grandes placas que se mueven constantemente. Donde se encuentran estas placas ocurren fenómenos geológicos:</p>
+            
+            <div class="mision-secreta">
+                <h3>🔐 MISIÓN SECRETA</h3>
+                <p>En cada caso que resuelvas correctamente, ganarás UNA PALABRA SECRETA. Al final de la investigación, estas 7 palabras formarán una frase misteriosa que deberás mostrar a tu profesor. ¡No pierdas ninguna palabra!</p>
+            </div>
+
+            <div class="bordes-info">
+                <div class="borde-card">
+                    <h3>🔵 DIVERGENTE (Construcción)</h3>
+                    <div class="diagrama">↖️ ← | → ↗️</div>
+                    <p>Las placas se <strong>separan</strong>. Sale magma y se forma nueva corteza.</p>
+                    <p class="ejemplo">Ejemplo: Islandia</p>
+                    <p class="ejemplo">Resultado: Volcanes, nueva tierra</p>
+                </div>
+                
+                <div class="borde-card">
+                    <h3>🔴 CONVERGENTE Océano-Continente (Destrucción/Subducción)</h3>
+                    <div class="diagrama">→ ⬇️ 🌊 ← 🏔️</div>
+                    <p>Una placa oceánica <strong>se hunde</strong> bajo una continental. Causa volcanes y terremotos.</p>
+                    <p class="ejemplo">Ejemplo: Chile, Japón, Perú</p>
+                    <p class="ejemplo">Resultado: Fosas, volcanes, terremotos</p>
+                </div>
+                
+                <div class="borde-card">
+                    <h3>🟡 CONVERGENTE Continente-Continente (Destrucción/Colisión)</h3>
+                    <div class="diagrama">🏔️ ← | → 🏔️</div>
+                    <p>Dos placas continentales <strong>chocan</strong>. Se forman montañas gigantes.</p>
+                    <p class="ejemplo">Ejemplo: Himalaya, Alpes</p>
+                    <p class="ejemplo">Resultado: Cordilleras altísimas</p>
+                </div>
+                
+                <div class="borde-card">
+                    <h3>🟢 TRANSFORMANTE (Deslizamiento)</h3>
+                    <div class="diagrama">↑ | ↓</div>
+                    <p>Las placas se <strong>deslizan</strong> horizontalmente una junto a otra.</p>
+                    <p class="ejemplo">Ejemplo: Falla de San Andrés</p>
+                    <p class="ejemplo">Resultado: Terremotos fuertes</p>
+                </div>
+            </div>
+            
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f39c12;">
+                <strong>💡 Consejo:</strong> Lee la PISTA GEOLÓGICA en cada noticia. Te dirá exactamente qué placas están involucradas y te ayudará a responder las preguntas.
+            </div>
+            
+            <button class="btn-continuar" onclick="mostrarCaso(1)">¡Entendido! Comenzar Casos →</button>
+        </div>
+    </div>
+
+    <!-- CASOS (se generarán dinámicamente) -->
+    <div id="caso1" class="screen"></div>
+    <div id="caso2" class="screen"></div>
+    <div id="caso3" class="screen"></div>
+    <div id="caso4" class="screen"></div>
+    <div id="caso5" class="screen"></div>
+    <div id="caso6" class="screen"></div>
+    <div id="caso7" class="screen"></div>
+
+    <!-- FINAL -->
+    <div id="final" class="screen">
+        <div class="final-container">
+            <h2>🎉 ¡Investigación Completada! 🎉</h2>
+            <div class="frase-completa" id="fraseCompleta"></div>
+            <div class="estadisticas">
+                <div class="stat">
+                    <div class="stat-numero" id="statEquipo"></div>
+                    <div class="stat-label">Equipo</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-numero" id="statPuntuacion"></div>
+                    <div class="stat-label">Puntuación</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-numero" id="statTiempo"></div>
+                    <div class="stat-label">Tiempo</div>
+                </div>
+            </div>
+            <div class="instruccion-profesor">
+                📢 <strong>¡IMPORTANTE!</strong><br>
+                Copia esta frase y muéstrasela a tu profesor para obtener tu calificación.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== ESTADO DE LA APLICACIÓN ====================
+        let estado = {
+            nombreEquipo: '',
+            casoActual: 0,
+            casosCompletados: [],
+            palabrasSecretas: [],
+            puntuacion: 0,
+            tiempoInicio: null,
+            tiempoFin: null
+        };
+
+        // ==================== DATOS DE LOS CASOS ====================
+        const casos = [
+            {
+                id: 1,
+                titulo: "LA TRAGEDIA DE POMPEYA",
+                fecha: "24 de agosto del año 79 d.C.",
+                noticia: `Una <span class="destacado">catástrofe sin precedentes</span> ha sacudido el Imperio Romano. La próspera ciudad de Pompeya ha quedado completamente sepultada bajo <span class="destacado">cenizas y lava del monte Vesubio</span>. Miles de ciudadanos perecieron en cuestión de horas mientras intentaban huir del apocalipsis volcánico.<br><br>
+
+Los supervivientes relatan escenas aterradoras: <span class="destacado">la montaña explotó con furia</span>, arrojando rocas incandescentes y nubes tóxicas que cubrieron el cielo. El día se convirtió en noche. La gente corría desesperada por las calles mientras edificios enteros se derrumbaban.<br><br>
+
+<div class="dato-impactante">💀 DATO IMPACTANTE: Los cuerpos quedaron preservados en las cenizas, creando moldes perfectos que muestran las últimas expresiones de terror de las víctimas. Hoy, 2000 años después, podemos ver exactamente cómo murieron.</div>
+
+El emperador Tito ha declarado luto nacional. Pompeya, una ciudad de <span class="destacado">20,000 habitantes</span>, ha desaparecido del mapa en menos de 24 horas.`,
+                pista: "🔍 PISTA GEOLÓGICA: Italia se encuentra en una zona donde restos de la placa Africana (oceánica) se están hundiendo bajo la placa Euroasiática (continental). Este proceso de subducción crea el magma que alimenta volcanes activos como el Vesubio.",
+                imagen: "pompeya.png",
+                mapa: "pompeya-mapa.png",
+                preguntas: [
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de borde tectónico causó la erupción del Vesubio?",
+                        opciones: ["Selecciona una opción...", "Divergente (construcción)", "Convergente océano-continente (destrucción/subducción)", "Convergente continente-continente (destrucción/colisión)", "Transformante (deslizamiento)"],
+                        respuesta: "Convergente océano-continente"
+                    },
+                    {
+                        tipo: "number",
+                        pregunta: "¿Aproximadamente cuántos habitantes tenía Pompeya según la noticia?",
+                        respuesta: "20000"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué quedó preservado en las cenizas que nos permite ver cómo murieron las víctimas?",
+                        opciones: ["Selecciona...", "Sus ropas", "Moldes de sus cuerpos", "Sus edificios", "Sus pinturas"],
+                        respuesta: "Moldes de sus cuerpos"
+                    }
+                ],
+                palabraSecreta: "BAJO"
+            },
+            {
+                id: 2,
+                titulo: "TERREMOTO DEVASTADOR EN HAITÍ",
+                fecha: "12 de enero de 2010",
+                noticia: `<span class="destacado">Puerto Príncipe en ruinas</span>. Un terremoto de magnitud 7.0 ha sacudido Haití causando devastación masiva en la capital y sus alrededores. Más de <span class="destacado">200,000 personas han perdido la vida</span> y millones han quedado sin hogar en lo que se considera una de las peores catástrofes naturales del siglo XXI.<br><br>
+
+El epicentro se localizó a solo <span class="destacado">25 kilómetros de Puerto Príncipe</span>. Los edificios colapsaron como castillos de naipes. El Palacio Nacional, símbolo del país, quedó destruido. Los hospitales, cuando más se necesitaban, también se derrumbaron.<br><br>
+
+<div class="dato-impactante">⚡ DATO IMPACTANTE: El terremoto fue tan fuerte que levantó Puerto Príncipe 20 centímetros y la movió 1 metro hacia el oeste en cuestión de segundos. ¡La ciudad cambió literalmente de posición!</div>
+
+Los sismólogos explican que fue causado por el <span class="destacado">movimiento lateral súbito</span> entre dos placas tectónicas a lo largo de la famosa falla Enriquillo.`,
+                pista: "🔍 PISTA GEOLÓGICA: El terremoto ocurrió en la falla Enriquillo, un borde transformante donde la placa Caribeña y la placa Norteamericana se deslizan horizontalmente una junto a la otra, como dos enormes bloques frotándose.",
+                imagen: "haiti.png",
+                mapa: "haiti-mapa.png",
+                preguntas: [
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de borde tectónico causó este terremoto?",
+                        opciones: ["Selecciona una opción...", "Divergente (construcción)", "Convergente océano-continente (destrucción/subducción)", "Convergente continente-continente (destrucción/colisión)", "Transformante (deslizamiento)"],
+                        respuesta: "Transformante"
+                    },
+                    {
+                        tipo: "text",
+                        pregunta: "¿Cómo se llama la falla geológica que causó el terremoto?",
+                        respuesta: "Enriquillo"
+                    },
+                    {
+                        tipo: "number",
+                        pregunta: "¿Cuántos centímetros se elevó Puerto Príncipe durante el terremoto?",
+                        respuesta: "20"
+                    }
+                ],
+                palabraSecreta: "TUS"
+            },
+            {
+                id: 3,
+                titulo: "JAPÓN: TERREMOTO Y TSUNAMI CATASTRÓFICO",
+                fecha: "11 de marzo de 2011",
+                noticia: `<span class="destacado">El terremoto más potente en la historia de Japón</span> ha desencadenado un tsunami gigantesco que arrasó la costa noreste del país. Con magnitud <span class="destacado">9.0</span>, el temblor duró casi 6 minutos, el más largo jamás registrado en Japón.<br><br>
+
+Olas de hasta <span class="destacado">40 metros de altura</span> —¡equivalente a un edificio de 13 pisos!— destruyeron ciudades enteras. Sendai, Miyako, Ishinomaki... pueblos completos desaparecieron bajo el agua en minutos. El mar se retiró primero, dejando el fondo marino al descubierto, antes de regresar con furia devastadora.<br><br>
+
+<div class="dato-impactante">🌊 DATO IMPACTANTE: El terremoto fue tan potente que movió la isla principal de Japón 2.4 metros hacia el este, acortó el día en 1.8 microsegundos y desplazó el eje de rotación de la Tierra 10 centímetros.</div>
+
+El desastre fue causado cuando <span class="destacado">una placa oceánica se hundió bruscamente</span> bajo Japón, liberando energía acumulada durante cientos de años. La central nuclear de Fukushima quedó gravemente dañada, causando la peor crisis nuclear desde Chernóbil.`,
+                pista: "🔍 PISTA GEOLÓGICA: Japón está ubicado donde la placa del Pacífico (oceánica) se hunde bajo la placa Norteamericana (continental). Este movimiento brusco causó el megaterremoto y levantó el agua del mar creando el tsunami devastador.",
+                imagen: "japon.png",
+                mapa: "japon-mapa.png",
+                preguntas: [
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué magnitud tuvo este megaterremoto?",
+                        opciones: ["Selecciona...", "7.0", "8.0", "9.0", "10.0"],
+                        respuesta: "9.0"
+                    },
+                    {
+                        tipo: "number",
+                        pregunta: "¿Cuántos metros de altura alcanzaron las olas más altas del tsunami?",
+                        respuesta: "40"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de borde tectónico causó este desastre?",
+                        opciones: ["Selecciona una opción...", "Divergente (construcción)", "Convergente océano-continente (destrucción/subducción)", "Convergente continente-continente (destrucción/colisión)", "Transformante (deslizamiento)"],
+                        respuesta: "Convergente océano-continente"
+                    }
+                ],
+                palabraSecreta: "PIES"
+            },
+            {
+                id: 4,
+                titulo: "ERUPCIÓN EN ISLANDIA PARALIZA LOS CIELOS DE EUROPA",
+                fecha: "14 de abril de 2010",
+                noticia: `<span class="destacado">El volcán con el nombre impronunciable</span> —Eyjafjallajökull— ha entrado en erupción causando el <span class="destacado">cierre del espacio aéreo europeo</span> durante semanas. Más de <span class="destacado">100,000 vuelos cancelados</span> y 10 millones de pasajeros varados en lo que representa la mayor interrupción del tráfico aéreo desde la Segunda Guerra Mundial.<br><br>
+
+La enorme nube de ceniza volcánica se extendió por todo el continente. Las partículas microscópicas de roca fundida pueden destruir los motores de los aviones, por lo que las autoridades no tuvieron más opción que cerrar los cielos.<br><br>
+
+<div class="dato-impactante">🌋 DATO IMPACTANTE: Islandia es uno de los pocos lugares del planeta donde puedes CAMINAR entre dos placas tectónicas. El Parque Nacional Thingvellir tiene un sendero que recorre la grieta donde América y Europa se están separando.</div>
+
+Este volcán se encuentra en un lugar único: justo sobre la <span class="destacado">Dorsal Mesoatlántica</span>, donde dos placas tectónicas se están separando, creando nueva corteza terrestre y volcanes muy activos. <span class="destacado">Islandia crece 2 centímetros cada año</span> por este proceso.`,
+                pista: "🔍 PISTA GEOLÓGICA: Islandia es uno de los pocos lugares donde se puede ver la Dorsal Mesoatlántica sobre el nivel del mar. Aquí la placa Norteamericana y la placa Euroasiática se están separando, permitiendo que el magma suba desde el manto y forme volcanes espectaculares.",
+                imagen: "islandia.png",
+                mapa: "islandia-mapa.png",
+                preguntas: [
+                    {
+                        tipo: "text",
+                        pregunta: "¿Cómo se llama la cordillera submarina sobre la que se encuentra Islandia?",
+                        respuesta: "Dorsal Mesoatlántica"
+                    },
+                    {
+                        tipo: "number",
+                        pregunta: "¿Cuántos centímetros crece Islandia cada año según la noticia?",
+                        respuesta: "2"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de borde caracteriza a Islandia?",
+                        opciones: ["Selecciona una opción...", "Divergente (construcción)", "Convergente océano-continente (destrucción/subducción)", "Convergente continente-continente (destrucción/colisión)", "Transformante (deslizamiento)"],
+                        respuesta: "Divergente"
+                    }
+                ],
+                palabraSecreta: "EL"
+            },
+            {
+                id: 5,
+                titulo: "EL GRAN TERREMOTO DE SAN FRANCISCO",
+                fecha: "18 de abril de 1906",
+                noticia: `A las <span class="destacado">5:12 de la madrugada</span>, San Francisco despertó con el peor terremoto de su historia. Un temblor de magnitud <span class="destacado">7.9</span> devastó la ciudad. El suelo se movió durante casi <span class="destacado">un minuto</span> —una eternidad cuando la tierra tiembla— y fue seguido por incendios masivos que arrasaron la ciudad durante tres días.<br><br>
+
+La <span class="destacado">Falla de San Andrés</span> se rompió a lo largo de 477 kilómetros. En algunos lugares, un lado de la falla se movió hasta <span class="destacado">6 metros</span> respecto al otro. Las vías del tren quedaron torcidas como serpientes, los edificios se partieron por la mitad, y las calles se abrieron tragándose carros y caballos.<br><br>
+
+<div class="dato-impactante">📸 DATO IMPACTANTE: Una vaca quedó dividida exactamente por la mitad cuando la falla se abrió bajo ella. La parte delantera quedó en un lado de la grieta y la trasera en el otro, separadas por 3 metros. Esta famosa fotografía muestra el poder instantáneo de los terremotos.</div>
+
+Los científicos determinaron que fue causado por el <span class="destacado">movimiento súbito</span> de la Falla de San Andrés, donde dos placas se deslizan horizontalmente. <span class="destacado">¡California se está moviendo hacia Alaska</span> a razón de 5 centímetros por año!`,
+                pista: "🔍 PISTA GEOLÓGICA: La Falla de San Andrés es un borde transformante de 1,300 km de largo donde la placa del Pacífico se desliza hacia el norte junto a la placa Norteamericana. En millones de años, Los Ángeles estará a la altura de San Francisco.",
+                imagen: "sanfrancisco.png",
+                mapa: "sanfrancisco-mapa.png",
+                preguntas: [
+                    {
+                        tipo: "text",
+                        pregunta: "¿Cómo se llama la famosa falla geológica que causó este terremoto?",
+                        respuesta: "San Andrés"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "¿Hacia dónde se está moviendo California según la noticia?",
+                        opciones: ["Selecciona...", "Hacia Alaska", "Hacia México", "Hacia Hawái", "Hacia Japón"],
+                        respuesta: "Hacia Alaska"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de falla causó este terremoto?",
+                        opciones: ["Selecciona una opción...", "Divergente (construcción)", "Convergente océano-continente (destrucción/subducción)", "Convergente continente-continente (destrucción/colisión)", "Transformante (deslizamiento)"],
+                        respuesta: "Transformante"
+                    }
+                ],
+                palabraSecreta: "PLANETA"
+            },
+            {
+                id: 6,
+                titulo: "TERREMOTO EN EL TECHO DEL MUNDO",
+                fecha: "16 de diciembre de 1920",
+                noticia: `Un devastador terremoto de magnitud <span class="destacado">8.5</span> sacudió la región del Himalaya causando más de <span class="destacado">200,000 víctimas</span>. Esta cordillera, <span class="destacado">la más alta del planeta</span>, continúa creciendo cada año debido al choque colosal entre dos masas continentales gigantescas.<br><br>
+
+El <span class="destacado">Monte Everest</span>, con sus 8,849 metros, es el pico más alto de la Tierra y sigue creciendo <span class="destacado">4 milímetros cada año</span>. Pueblos enteros fueron sepultados por avalanchas masivas de nieve y roca. Los valles se cerraron cuando las montañas colapsaron, creando lagos instantáneos que luego se desbordaron causando inundaciones catastróficas.<br><br>
+
+<div class="dato-impactante">🏔️ DATO IMPACTANTE: En la cima del Everest se han encontrado fósiles marinos de criaturas que vivieron en el océano hace 450 millones de años. ¡El techo del mundo una vez fue el fondo del mar! Esto demuestra el increíble poder de las placas tectónicas para elevar montañas.</div>
+
+Este proceso ha estado ocurriendo durante <span class="destacado">50 millones de años</span>, desde que India —que una vez fue una isla viajando hacia el norte— chocó con Asia como un martillo gigante, arrugando la corteza terrestre y elevando el Himalaya.`,
+                pista: "🔍 PISTA GEOLÓGICA: Hace 50 millones de años, India era una isla que viajaba hacia el norte a gran velocidad. Cuando chocó con Asia (placa Euroasiática), se formó el Himalaya. Las montañas siguen creciendo porque India continúa empujando hacia el norte.",
+                imagen: "himalaya.png",
+                mapa: "himalaya-mapa.png",
+                preguntas: [
+                    {
+                        tipo: "text",
+                        pregunta: "¿Cómo se llama el pico más alto del mundo mencionado en la noticia?",
+                        respuesta: "Everest"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de fósiles se han encontrado en la cima del Everest?",
+                        opciones: ["Selecciona...", "Fósiles de dinosaurios", "Fósiles marinos (de criaturas del océano)", "Fósiles de mamíferos", "Fósiles de plantas"],
+                        respuesta: "Fósiles marinos"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de borde formó el Himalaya?",
+                        opciones: ["Selecciona una opción...", "Divergente (construcción)", "Convergente océano-continente (destrucción/subducción)", "Convergente continente-continente (destrucción/colisión)", "Transformante (deslizamiento)"],
+                        respuesta: "Convergente continente-continente"
+                    }
+                ],
+                palabraSecreta: "NUNCA"
+            },
+            {
+                id: 7,
+                titulo: "CHILE: TERREMOTO Y TSUNAMI DEL BICENTENARIO",
+                fecha: "27 de febrero de 2010",
+                noticia: `Un <span class="destacado">megaterremoto de magnitud 8.8</span> sacudió Chile en su año del bicentenario, uno de los más potentes jamás registrados en el planeta. El temblor duró <span class="destacado">más de 3 minutos</span> y fue tan fuerte que <span class="destacado">acortó el día terrestre en 1.26 microsegundos</span>.<br><br>
+
+El tsunami posterior afectó toda la costa del Pacífico. Olas de hasta <span class="destacado">30 metros</span> golpearon pueblos costeros. El mar llegó hasta <span class="destacado">3 kilómetros tierra adentro</span> en algunas zonas, arrastrando casas, barcos y todo a su paso. Las olas cruzaron el océano y llegaron a Japón 22 horas después.<br><br>
+
+<div class="dato-impactante">🌎 DATO IMPACTANTE: Chile es el país con más terremotos gigantes del mundo. En promedio, sufre un terremoto de magnitud 8+ cada 10 años. El terremoto más potente jamás registrado en la historia ocurrió en Chile en 1960: magnitud 9.5, equivalente a ¡178,000 bombas atómicas!</div>
+
+Chile se encuentra en el <span class="destacado">'Cinturón de Fuego del Pacífico'</span>, donde una placa oceánica se hunde bajo Sudamérica, causando frecuentes terremotos y volcanes activos a lo largo de toda la cordillera de los Andes.`,
+                pista: "🔍 PISTA GEOLÓGICA: Toda la costa occidental de Sudamérica es una zona de subducción donde la placa de Nazca (oceánica) se hunde bajo la placa Sudamericana (continental) a razón de 8 cm por año. Los Andes se formaron y siguen creciendo por este proceso.",
+                imagen: "chile.png",
+                mapa: "chile-mapa.png",
+                preguntas: [
+                    {
+                        tipo: "select",
+                        pregunta: "¿Qué tipo de borde tectónico afecta a Chile?",
+                        opciones: ["Selecciona una opción...", "Divergente (construcción)", "Convergente océano-continente (destrucción/subducción)", "Convergente continente-continente (destrucción/colisión)", "Transformante (deslizamiento)"],
+                        respuesta: "Convergente océano-continente"
+                    },
+                    {
+                        tipo: "text",
+                        pregunta: "¿Cómo se llama el 'cinturón' de volcanes y terremotos donde está Chile?",
+                        respuesta: "Cinturón de Fuego"
+                    },
+                    {
+                        tipo: "select",
+                        pregunta: "Según la noticia, ¿cuál fue la magnitud del terremoto más potente de la historia (Chile 1960)?",
+                        opciones: ["Selecciona...", "8.8", "9.0", "9.5", "10.0"],
+                        respuesta: "9.5"
+                    }
+                ],
+                palabraSecreta: "DESCANSA"
+            }
+        ];
+
+        // ==================== FUNCIONES DE NAVEGACIÓN ====================
+        function mostrarPantalla(idPantalla) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            setTimeout(() => {
+                document.getElementById(idPantalla).classList.add('active');
+            }, 100);
+        }
+
+        function registrarEquipo() {
+            const nombre = document.getElementById('nombreEquipo').value.trim();
+            if (nombre === '') {
+                alert('Por favor, introduce el nombre de tu equipo.');
+                return;
+            }
+            
+            estado.nombreEquipo = nombre;
+            estado.tiempoInicio = new Date();
+            
+            generarCasos();
+            mostrarPantalla('tutorial');
+        }
+
+        function mostrarCaso(numeroCaso) {
+            estado.casoActual = numeroCaso;
+            mostrarPantalla('caso' + numeroCaso);
+        }
+
+        // ==================== GENERACIÓN DE CASOS ====================
+        function generarCasos() {
+            casos.forEach((caso) => {
+                const casoDiv = document.getElementById('caso' + caso.id);
+                casoDiv.innerHTML = `
+                    <div class="caso-container">
+                        <div class="barra-progreso">
+                            ${generarBarraProgreso()}
+                        </div>
+                        
+                        <div class="noticia">
+                            <div class="noticia-header">
+                                <div class="fecha">${caso.fecha}</div>
+                                <h2>${caso.titulo}</h2>
+                            </div>
+                            
+                            <div class="imagenes-caso">
+                                <img src="${caso.imagen}" alt="${caso.titulo}" class="noticia-imagen" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22250%22%3E%3Crect fill=%22%238b4513%22 width=%22400%22 height=%22250%22/%3E%3Ctext fill=%22%23f4e9cd%22 font-size=%2218%22 font-family=%22Arial%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22%3EImagen del evento%3C/text%3E%3C/svg%3E'">
+                                <img src="${caso.mapa}" alt="Mapa de ${caso.titulo}" class="imagen-mapa" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22250%22%3E%3Crect fill=%22%232c3e50%22 width=%22400%22 height=%22250%22/%3E%3Ctext fill=%22%23f4e9cd%22 font-size=%2218%22 font-family=%22Arial%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22%3EMapa de localización%3C/text%3E%3C/svg%3E'">
+                            </div>
+                            
+                            <div class="noticia-texto">${caso.noticia}</div>
+                            <div class="pista-geologica">${caso.pista}</div>
+                        </div>
+                        
+                        <div class="preguntas">
+                            <h3 style="margin-bottom: 20px; color: #8b4513; font-family: 'Playfair Display', serif;">🔍 Analiza el Caso:</h3>
+                            ${generarPreguntas(caso)}
+                        </div>
+                        
+                        <div class="palabra-secreta" id="palabra${caso.id}">
+                            🔑 Palabra Secreta Revelada: <strong>${caso.palabraSecreta}</strong>
+                        </div>
+                        
+                        <div id="feedback${caso.id}"></div>
+                        
+                        <div class="botones">
+                            <button class="btn btn-verificar" onclick="verificarCaso(${caso.id})">✓ Verificar Respuestas</button>
+                            <button class="btn btn-siguiente" id="btnSiguiente${caso.id}" disabled onclick="siguienteCaso(${caso.id})">
+                                ${caso.id === 7 ? '🏆 Ver Resultados' : '→ Siguiente Caso'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function generarBarraProgreso() {
+            let html = '';
+            for (let i = 1; i <= 7; i++) {
+                let clase = '';
+                if (estado.casosCompletados.includes(i)) {
+                    clase = 'completada';
+                } else if (i === estado.casoActual) {
+                    clase = 'actual';
+                }
+                html += `<div class="etapa ${clase}">${i}</div>`;
+            }
+            return html;
+        }
+
+        function generarPreguntas(caso) {
+            return caso.preguntas.map((pregunta, index) => {
+                if (pregunta.tipo === 'select') {
+                    return `
+                        <div class="pregunta">
+                            <label>${pregunta.pregunta}</label>
+                            <select id="caso${caso.id}_p${index}">
+                                ${pregunta.opciones.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                } else if (pregunta.tipo === 'number') {
+                    return `
+                        <div class="pregunta">
+                            <label>${pregunta.pregunta}</label>
+                            <input type="number" id="caso${caso.id}_p${index}" placeholder="Escribe el número...">
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="pregunta">
+                            <label>${pregunta.pregunta}</label>
+                            <input type="text" id="caso${caso.id}_p${index}" placeholder="Escribe tu respuesta...">
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // ==================== VALIDACIÓN ====================
+        function verificarCaso(numeroCaso) {
+            const caso = casos[numeroCaso - 1];
+            let todasCorrectas = true;
+            
+            caso.preguntas.forEach((pregunta, index) => {
+                const input = document.getElementById(`caso${numeroCaso}_p${index}`);
+                const respuestaUsuario = input.value.trim();
+                const esCorrecta = validarRespuesta(respuestaUsuario, pregunta.respuesta, pregunta.tipo);
+                
+                if (esCorrecta) {
+                    input.classList.remove('incorrecto');
+                    input.classList.add('correcto');
+                } else {
+                    input.classList.remove('correcto');
+                    input.classList.add('incorrecto');
+                    todasCorrectas = false;
+                }
+            });
+            
+            const feedbackDiv = document.getElementById('feedback' + numeroCaso);
+            
+            if (todasCorrectas) {
+                feedbackDiv.innerHTML = '<div class="feedback exito">✓ ¡Excelente trabajo, detective! Todas las respuestas son correctas.</div>';
+                document.getElementById('btnSiguiente' + numeroCaso).disabled = false;
+                
+                const palabraDiv = document.getElementById('palabra' + numeroCaso);
+                palabraDiv.classList.add('mostrar');
+                
+                setTimeout(() => {
+                    palabraDiv.classList.add('celebracion');
+                    setTimeout(() => palabraDiv.classList.remove('celebracion'), 500);
+                }, 100);
+                
+                if (!estado.casosCompletados.includes(numeroCaso)) {
+                    estado.casosCompletados.push(numeroCaso);
+                    estado.palabrasSecretas.push(caso.palabraSecreta);
+                    estado.puntuacion++;
+                }
+                
+                actualizarBarraProgreso();
+                
+            } else {
+                feedbackDiv.innerHTML = '<div class="feedback error">✗ Algunas respuestas son incorrectas. Revisa e intenta de nuevo.</div>';
+            }
+        }
+
+        function validarRespuesta(respuestaUsuario, respuestaCorrecta, tipo) {
+            if (tipo === 'number') {
+                const numUsuario = parseInt(respuestaUsuario);
+                const numCorrecto = parseInt(respuestaCorrecta);
+                return numUsuario === numCorrecto;
+            }
+            
+            const normalizar = (str) => {
+                return str.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/\([^)]*\)/g, '')
+                    .replace(/placa\s*(del|de|la)?\s*/gi, '')
+                    .trim();
+            };
+            
+            const usuario = normalizar(respuestaUsuario);
+            const correcta = normalizar(respuestaCorrecta);
+            
+            if (respuestaUsuario.includes('Selecciona')) return false;
+            if (usuario === correcta) return true;
+            
+            return usuario.includes(correcta) || correcta.includes(usuario);
+        }
+
+        function actualizarBarraProgreso() {
+            document.querySelectorAll('.barra-progreso').forEach(barra => {
+                barra.innerHTML = generarBarraProgreso();
+            });
+        }
+
+        function siguienteCaso(numeroCaso) {
+            if (numeroCaso === 7) {
+                mostrarResultadosFinales();
+            } else {
+                mostrarCaso(numeroCaso + 1);
+            }
+        }
+
+        // ==================== PANTALLA FINAL ====================
+        function mostrarResultadosFinales() {
+            estado.tiempoFin = new Date();
+            const tiempoTranscurrido = Math.floor((estado.tiempoFin - estado.tiempoInicio) / 1000 / 60);
+            
+            const fraseCompleta = estado.palabrasSecretas.join(' ');
+            
+            document.getElementById('fraseCompleta').textContent = fraseCompleta;
+            document.getElementById('statEquipo').textContent = estado.nombreEquipo;
+            document.getElementById('statPuntuacion').textContent = estado.puntuacion + '/7';
+            document.getElementById('statTiempo').textContent = tiempoTranscurrido + ' min';
+            
+            mostrarPantalla('final');
+        }
+    </script>
+</body>
+</html>
